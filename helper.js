@@ -2,15 +2,19 @@ require('songbird')
 const path = require('path')
 
 const defaultRoot = path.resolve(path.join(process.cwd(), 'files'))
+const defaultClientRoot = path.resolve(path.join(process.cwd(), 'cfiles'))
 
 const argv = require('yargs')
                       .default('dir', defaultRoot)
+                      .default('cdir', defaultClientRoot)
                       .argv
 
 const dir = argv.dir
+const cdir = argv.cdir
 
 const config = {
   ROOT_DIR: dir,
+  CLIENT_DIR: cdir,
   HTTP_PORT: 8000,
   TCP_PORT: 8001,
   SERVER: '127.0.0.1'

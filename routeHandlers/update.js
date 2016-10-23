@@ -14,7 +14,7 @@ module.exports = function updateHandler(onUpdate) {
       req.pipe(writeStream)
       writeStream.on('finish', () => {
         console.log('CALL TCP SYNC UPDATE')
-        onUpdate(req.filePath, req.isDir)
+        onUpdate(req.url, req.isDir)
       })
     }
     return Promise.resolve('next')

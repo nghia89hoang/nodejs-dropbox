@@ -4,20 +4,51 @@ const nssocket = require('nssocket')
 const fs = require('fs')
 const path = require('path')
 const chokidar = require('chokidar')
+const request = require('request')
+const mkdirp = require('mkdirp')
+const rimraf = require('rimraf')
+const unzip = require('unzip2')
 
-const ROOT_DIR = conf.ROOT_DIR
+// const ROOT_DIR = conf.ROOT_DIR
+const CLIENT_DIR = conf.CLIENT_DIR
 const TCP_PORT = conf.TCP_PORT
+const HTTP_PORT = conf.HTTP_PORT
 const SERVER = conf.SERVER
+const HTTP_SERVER_URL = `http://${SERVER}:${HTTP_PORT}`
 
-function main() {
+async function main() {
   const socket = new nssocket.NsSocket()
   socket.connect(TCP_PORT, SERVER)
-  socket.data('ServerCall', (data) => {
-    console.log(`Call what? ${data}`)
+  socket.data('SYNC_ALL', (data) => {
+    const options = {
+      url: HTTP_SERVER_URL,
+      headers: { Accept: 'application/x-gtar' }
+    }
+    const readStream = request.get(options)
+    readStream.pipe(unzip.Extract({ path: CLIENT_DIR }))
   })
-  socket.data('SYNC', (data) => {
-    // console.log(`SYNC ... ${data}`)
-    console.log('SYNC...')
+  socket.data('SYNC', async (data) => {
+    const filePath = path.resolve(path.join(CLIENT_DIR, data.path))
+    if (!data) {
+      return
+    }
+    switch (data.action) {
+      case 'write':
+        if (data.isDir) {
+          mkdirp.promise(filePath)
+        } else {
+          const dirPath = path.dirname(filePath)
+          await mkdirp.promise(dirPath)
+          const writeStream = fs.createWriteStream(filePath)
+          request.get(`${HTTP_SERVER_URL}/${data.path}`).pipe(writeStream)
+        }
+        break
+      case 'delete':
+        await rimraf.promise(filePath)
+        break
+      default:
+        console.log(`UNSUPPORTED ACTION: ${data.action}`)
+    }
   })
   socket.send('Connecting', { client: '123' })
 }

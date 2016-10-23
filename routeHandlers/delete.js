@@ -10,7 +10,7 @@ module.exports = function deleteHandler(onDelete) {
     }
     rimraf.promise(filePath).then(dummy => {
       console.log('CALL TCP SYNC DEL')
-      onDelete(req.filePath, req.isDir)
+      onDelete(req.url, req.isDir)
     })
     return Promise.resolve('next')
   }

@@ -1,0 +1,28 @@
+// Place your settings in this file to overwrite default and user settings.
+{  
+  "eslint.options": {
+        "env": {
+            "node": true,
+            "es6": true
+        },
+        "parser": "babel-eslint",
+        "rules": {
+            "curly": [2, "multi-line"],            
+            "no-throw-literal": 1,
+            "strict": [2, "never"],
+            "semi": [2, "never"],
+            "quotes": [2, "single"],
+            "no-var": 1,
+            "eol-last": 1,
+            "no-new-require": 1,
+            "no-sync": 1,
+            "no-mixed-requires": [1, false],
+            "comma-dangle": 0,
+            "no-param-reassign": 0,
+            "no-use-before-define": 0,
+            "new-cap": [0, {
+                "capIsNewExceptions": ["Schema"]
+            }]            
+        }
+    }
+}

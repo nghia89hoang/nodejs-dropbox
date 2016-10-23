@@ -2,6 +2,7 @@ require('./helper')
 const fs = require('fs')
 const util = require('util')
 const path = require('path')
+const nssocket = require('nssocket')
 
 const argv = process.argv
 const dir = argv[2]
@@ -20,4 +21,14 @@ async function statFolder(filePath) {
 
 // touch(dir)
 
-statFolder(dir)
+// statFolder(dir)
+
+function testNssocket() {
+  const server = nssocket.createServer((socket) => {
+    
+  })
+  console.log(`SERVER: ${JSON.stringify(server)}`)
+  server.listen(8000)
+}
+
+testNssocket()

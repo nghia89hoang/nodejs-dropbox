@@ -71,7 +71,7 @@ async function main() {
   // ********************************* TCP
   const tcpServer = nssocket.createServer((socket) => {
     clients.push(socket)
-    socket.send('ServerCall', 'Chim se goi dai bang')
+    socket.send('SYNC_ALL', '')
     socket.data('Connecting', (data) => {
       console.log(`There are ${clients.length} client(s) connected`)
     })

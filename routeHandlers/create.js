@@ -13,7 +13,7 @@ module.exports = function createHandler(onCreate) {
       res.status(405).send('Method not allowed: file existed')
     } else if (req.isDir) {
       await mkdirp.promise(req.dirPath)
-      onCreate(req.filePath, req.isDir)
+      onCreate(req.url, req.isDir)
     } else {
       await mkdirp.promise(req.dirPath)
       console.log('Streamming content...')
@@ -21,7 +21,7 @@ module.exports = function createHandler(onCreate) {
       req.pipe(writeStream)
       writeStream.on('finish', () => {
         console.log('CALL TCP SYNC CREATE')
-        onCreate(req.filePath, req.isDir)
+        onCreate(req.url, req.isDir)
       })
     }
     return Promise.resolve('next')
