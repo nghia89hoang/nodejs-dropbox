@@ -1,14 +1,22 @@
 require('../helper')
-const fs = require('fs').promise
-const mkdir = require('../clis/mkdir')
-const touch = require('../clis/touch')
-const u = require('../utils')
+const fs = require('fs')
+const mkdirp = require('mkdirp')
+
+// const mkdir = require('../clis/mkdir')
+// const touch = require('../clis/touch')
 
 module.exports = async function createHandler(req, res, next) {
-  const filePath = u.getLocalFilePathFromRequest(req)
-  console.log(`Creating ${filePath}`)
-
-  // const stat = await fs.stat(filePath)
-  // await stat.isDirectory() ? mkdir(filePath) : touch(filePath)
+  console.log(`Creating ${req.filePath}`)
+  await mkdirp.promise(req.dirPath)
+  if (!req.isDir) {
+    if (req.stat === null) {
+      console.log('Streamming content...')
+      req.pipe(fs.createWriteStream(req.filePath))
+    } else {
+      console.log('File existed !!!')
+      res.status(405).send('Method not allowed: file existed')
+    }
+  }
+  // safe to end here ???
   res.end()
 }

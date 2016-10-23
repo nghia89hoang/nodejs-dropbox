@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "A basic Dropbox clone to sync files across multiple remote folders.",
   "main": "server.js",
-  "scripts": {
-    "start": "nodemon  --exec babel-node -- ./ -- ",
+  "scripts": {    
+    "start": "nodemon  --exec babel-node -- server.js -- ",
     "once": "babel-node -- ./",
     "test": "mocha --compilers js:babel-register test/spec",
     "dev": "run-p start watch:test watch:lint",
@@ -30,7 +30,9 @@
     "babel-register": "^6.14.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "express-promise-router": "^1.1.1",
     "mime-types": "^2.1.12",
+    "mkdirp": "^0.5.1",
     "morgan": "^1.7.0",
     "nodemon": "^1.10.2",
     "npm-run-all": "^3.1.0",
