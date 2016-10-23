@@ -1,7 +1,7 @@
-const config = require('../helper')
+const conf = require('../helper')
 const path = require('path')
 
-const ROOT_DIR = config.ROOT_DIR
+const ROOT_DIR = conf.ROOT_DIR
 // const ROOT_DIR = path.resolve(path.join(process.cwd(), 'files'))
 
 module.exports = function verifyPath(req, res, next) {

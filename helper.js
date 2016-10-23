@@ -1,13 +1,19 @@
 require('songbird')
 const path = require('path')
-const argv = require('yargs')
-                      .argv
 
 const defaultRoot = path.resolve(path.join(process.cwd(), 'files'))
-const dir = argv.dir || defaultRoot
+
+const argv = require('yargs')
+                      .default('dir', defaultRoot)
+                      .argv
+
+const dir = argv.dir
 
 const config = {
-  ROOT_DIR: dir
+  ROOT_DIR: dir,
+  HTTP_PORT: 8000,
+  TCP_PORT: 8001,
+  SERVER: '127.0.0.1'
 }
 module.exports = config
 

@@ -12,7 +12,8 @@
     "lint": "eslint ./",
     "build": "babel ./ -o dist",
     "watch:test": "nodemon --exec \"npm test || true\"",
-    "watch:lint": "nodemon --exec \"npm run lint || true\""
+    "watch:lint": "nodemon --exec \"npm run lint || true\"",
+    "client": "nodemon --exec babel-node -- client.js --"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "babel-preset-nodev6": "^1.0.0",
     "babel-register": "^6.14.0",
     "body-parser": "^1.15.2",
+    "chokidar": "^1.6.1",
     "express": "^4.14.0",
     "express-promise-router": "^1.1.1",
     "mime-types": "^2.1.12",
@@ -37,6 +39,7 @@
     "morgan": "^1.7.0",
     "nodemon": "^1.10.2",
     "npm-run-all": "^3.1.0",
+    "nssocket": "^0.6.0",
     "songbird": "^1.0.4",
     "trycatch": "^1.5.21",
     "yargs": "^6.3.0"
