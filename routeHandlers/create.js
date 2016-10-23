@@ -7,16 +7,17 @@ const mkdirp = require('mkdirp')
 
 module.exports = async function createHandler(req, res, next) {
   console.log(`Creating ${req.filePath}`)
+  if (req.stat != null) {
+    console.log('File existed !!!')
+    res.status(405).end('Method not allowed: file existed')
+    return Promise.resolve('route')
+  }
   await mkdirp.promise(req.dirPath)
   if (!req.isDir) {
-    if (req.stat === null) {
-      console.log('Streamming content...')
-      req.pipe(fs.createWriteStream(req.filePath))
-    } else {
-      console.log('File existed !!!')
-      res.status(405).send('Method not allowed: file existed')
-    }
+    console.log('Streamming content...')
+    req.pipe(fs.createWriteStream(req.filePath))
   }
-  // safe to end here ???
   res.end()
+  return Promise.resolve('next')
 }
+

@@ -4,7 +4,7 @@ require('./helper')
 
 const express = require('express')
 const morgan = require('morgan')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 // const router = express.Router()
 const router = require('express-promise-router')()
 
@@ -31,12 +31,12 @@ async function main() {
   router.head('*', verifyPath, resolveFileStat, sendHeaders, end)
   router.get('*', verifyPath, resolveFileStat, sendHeaders, readHandler)
   router.put('*', verifyPath, resolveFileStat, createHandler)
-  router.post('*', verifyPath, resolveFileStat, bodyParser.raw(), updateHandler)
-  router.delete('*', deleteHandler)
+  router.post('*', verifyPath, resolveFileStat, updateHandler)
+  router.delete('*', verifyPath, resolveFileStat, deleteHandler)
   // ** ERR HANDLE ************
   httpServer.use((err, req, res, next) => {
-    console.error(`Internal error caucht with stack trace: ${err.stack}`)
-    res.status(500).end(`Server internal error:${err.msg}`)
+    console.error(`[App]Internal error caucht with stack trace: ${err.stack}`)
+    res.status(500).end(`Server internal error:${err.message}`)
   })
   // **************************
   await httpServer.promise.listen(PORT)

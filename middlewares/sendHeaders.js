@@ -22,7 +22,7 @@ module.exports = async function sendHeaders(req, res, next) {
     'Content-Type': contentType,
     'Content-Length': size
   }
-  console.log(`HEADER SET: ${headers}`)
+  console.log(`HEADER SET: ${JSON.stringify(headers)}`)
   res.set(headers)
   return Promise.resolve('next')
 }
