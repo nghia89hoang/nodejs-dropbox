@@ -20,6 +20,7 @@ async function main() {
   const socket = new nssocket.NsSocket()
   socket.connect(TCP_PORT, SERVER)
   socket.data('SYNC_ALL', (data) => {
+    console.log('Sync full using zip')
     const options = {
       url: HTTP_SERVER_URL,
       headers: { Accept: 'application/x-gtar' }
@@ -29,11 +30,14 @@ async function main() {
   })
   socket.data('SYNC', async (data) => {
     const filePath = path.resolve(path.join(CLIENT_DIR, data.path))
+    console.log(`ACTION: ${data.action} -> PATH: ${filePath}`)
     if (!data) {
       return
     }
     switch (data.action) {
       case 'write':
+      case 'create':
+      case 'update':
         if (data.isDir) {
           mkdirp.promise(filePath)
         } else {

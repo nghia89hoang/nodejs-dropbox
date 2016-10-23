@@ -9,6 +9,7 @@ const morgan = require('morgan')
 const router = require('express-promise-router')()
 const nssocket = require('nssocket')
 const chokidar = require('chokidar')
+const path = require('path')
 // ------------------------------ MIDDLEWARES
 const verifyPath = require('./middlewares/verifyPath')
 const resolveFileStat = require('./middlewares/resolveFileStat')
@@ -27,9 +28,16 @@ const TCP_PORT = conf.TCP_PORT
 const ROOT_DIR = conf.ROOT_DIR
 
 const clients = []
+const stagedFiles = []
 
 function tcpSync(action) {
   const syncImpl = (filePath, isDir) => {
+    const idx = stagedFiles.indexOf(filePath)
+    if (idx !== -1) {
+      stagedFiles.splice(idx, 1)
+      return
+    }
+    stagedFiles.push(filePath)
     const messages = {
       action,
       path: filePath,
@@ -88,20 +96,30 @@ async function main() {
     .on('unlink', onUnlink)
 }
 
-function onAddDir(path) {
-
+function onAddDir(abspath) {
+  console.log(`add dir ${abspath}`)
+  const relativePath = path.relative(ROOT_DIR, abspath)
+  tcpSync('write')(relativePath, true)
 }
-function onUnlinkDir(path) {
-
+function onUnlinkDir(abspath) {
+  console.log(`rmv dir ${abspath}`)
+  const relativePath = path.relative(ROOT_DIR, abspath)
+  tcpSync('delete')(relativePath, true)
 }
-function onAdd(path) {
-
+function onAdd(abspath) {
+  console.log(`add file ${abspath}`)
+  const relativePath = path.relative(ROOT_DIR, abspath)
+  tcpSync('create')(relativePath, false)
 }
-function onChange(path) {
-
+function onChange(abspath) {
+  console.log(`upd file ${abspath}`)
+  const relativePath = path.relative(ROOT_DIR, abspath)
+  tcpSync('update')(relativePath, false)
 }
-function onUnlink(path) {
-
+function onUnlink(abspath) {
+  console.log(`rmv file ${abspath}`)
+  const relativePath = path.relative(ROOT_DIR, abspath)
+  tcpSync('delete')(relativePath, false)
 }
 
 main()
