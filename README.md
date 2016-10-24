@@ -2,14 +2,14 @@
 
 This is a basic Dropbox clone to sync files across multiple remote folders.
 
-Time spent: `<Number of hours spent>`
+Time spent: 15
 
 ## Features
 
 ### Required
 
 - [x] Completed Requireds marked with `[x]`
-- [ ] Walkthrough Gif embedded in README
+- [x] Walkthrough Gif embedded in README
 - [x] README `Time spent:` includes the number of hours spent on the assignment
 - [x] Client can make GET requests to get file or directory contents
 - [x] Client can download a directory as an archive
@@ -34,9 +34,11 @@ Time spent: `<Number of hours spent>`
 
 
 ## Walkthrough
+### Express VFS API Server Demo
+![Video Walkthrough](vfs-server.gif)
 
-`<Add your Walkthrough Gif here (by updating the image URL)>`
-![Video Walkthrough](...)
+### TCP Dropbox Sync Server Demo
+![Video Walkthrough](dropbox_sync_server.gif)
 
 
 
