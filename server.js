@@ -90,7 +90,10 @@ async function main() {
   tcpServer.listen(TCP_PORT)
   console.log(`TCP LISTENING @ http://127.0.0.1:${TCP_PORT}`)
   // ********************************* CHOKIDAR
-  const watcher = chokidar.watch(ROOT_DIR, { ignored: /[\/\\]\./ })
+  const watcher = chokidar.watch(ROOT_DIR, {
+    ignored: /[\/\\]\./,
+    ignoreInitial: true
+  })
   watcher
     .on('addDir', onAddDir)
     .on('unlinkDir', onUnlinkDir)

@@ -30,7 +30,7 @@ async function main() {
   })
   socket.data('SYNC', async (data) => {
     const filePath = path.resolve(path.join(CLIENT_DIR, data.path))
-    console.log(`ACTION: ${data.action} -> PATH: ${filePath}`)
+    console.log(`ACTION: ${data.action} -> ${data.type}: ${filePath}`)
     if (!data) {
       return
     }
@@ -38,7 +38,7 @@ async function main() {
       case 'write':
       case 'create':
       case 'update':
-        if (data.isDir) {
+        if (data.type === 'dir') {
           mkdirp.promise(filePath)
         } else {
           const dirPath = path.dirname(filePath)
