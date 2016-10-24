@@ -1,6 +1,6 @@
 require('../helper')
 
 module.exports = async function end(req, res) {
-  console.log('Response Ending')  
+  console.log('------------- ENDING HTTP -------------')
   res.end()
 }

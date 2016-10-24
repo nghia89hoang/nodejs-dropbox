@@ -6,7 +6,7 @@ module.exports = async function readHandler(req, res, next) {
   const filePath = req.filePath
   const isDir = req.isDir
   let contentLength = 0
-  console.log(`Reading ${filePath}`)
+  console.log(` HTTP Reading ${filePath}`)
   if (!req.stat) {
     res.status(400).send('File not found')
   } else if (!isDir) {
@@ -25,7 +25,7 @@ module.exports = async function readHandler(req, res, next) {
       ])
       archive.pipe(res)
       archive.finalize()
-      // return Promise.resolve('next')
+      return Promise.resolve('next')
     } else {
       console.log('Listing ...')
       const files = await fs.promise.readdir(filePath)

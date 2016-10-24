@@ -3,7 +3,7 @@ const fs = require('fs')
 
 module.exports = function updateHandler(onUpdate) {
   return async(req, res, next) => {
-    console.log(`Updating ${req.filePath}`)
+    console.log(` HTTP Updating ${req.filePath}`)
     if (req.isDir) {
       res.status(405).send('Path is not a file')
     } else if (req.stat == null) {
@@ -13,8 +13,7 @@ module.exports = function updateHandler(onUpdate) {
       const writeStream = fs.createWriteStream(req.filePath)
       req.pipe(writeStream)
       writeStream.on('finish', () => {
-        console.log('CALL TCP SYNC UPDATE')
-        onUpdate(req.url, req.isDir)
+        onUpdate(req.filePath, req.isDir)
       })
     }
     return Promise.resolve('next')

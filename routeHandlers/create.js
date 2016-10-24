@@ -7,21 +7,20 @@ const mkdirp = require('mkdirp')
 
 module.exports = function createHandler(onCreate) {
   return async(req, res, next) => {
-    console.log(`Creating ${req.filePath}`)
+    console.log(` HTTP Creating ${req.filePath}`)
     if (req.stat != null) {
       console.log('File existed !!!')
       res.status(405).send('Method not allowed: file existed')
     } else if (req.isDir) {
       await mkdirp.promise(req.dirPath)
-      onCreate(req.url, req.isDir)
+      onCreate(req.dirPath, req.isDir)
     } else {
       await mkdirp.promise(req.dirPath)
-      console.log('Streamming content...')
+      console.log('Saving new content...')
       const writeStream = fs.createWriteStream(req.filePath)
       req.pipe(writeStream)
       writeStream.on('finish', () => {
-        console.log('CALL TCP SYNC CREATE')
-        onCreate(req.url, req.isDir)
+        onCreate(req.filePath, req.isDir)
       })
     }
     return Promise.resolve('next')

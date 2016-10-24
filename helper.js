@@ -2,7 +2,7 @@ require('songbird')
 const path = require('path')
 
 const defaultRoot = path.resolve(path.join(process.cwd(), 'files'))
-const defaultClientRoot = path.resolve(path.join(process.cwd(), 'cfiles'))
+const defaultClientRoot = path.resolve(path.join(process.cwd(), 'client_files'))
 
 const argv = require('yargs')
                       .default('dir', defaultRoot)
