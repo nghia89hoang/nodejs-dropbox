@@ -14,18 +14,21 @@ module.exports = async function readHandler(req, res, next) {
     contentLength = req.stat.size
     fs.createReadStream(filePath).pipe(res)
     res.set('Content-Length', contentLength)
+    // fs.createReadStream(filePath).promise.pipe(res).then(dummy => {
+    //   next()
+    // })
   } else {
-    const acceptHeader = req.headers.accept
-    if (acceptHeader && acceptHeader.indexOf('application/x-gtar') >= 0) {
-      console.log('Zipping...')
+    // const acceptHeader = req.headers.accept
+    // if (acceptHeader && acceptHeader.indexOf('application/x-gtar') >= 0) {
+    // console.log(`Response Header: ${res.get('Content-Type')}`)
+    if (res.get('Content-Type') === 'application/zip') {
+      console.log('Compressing content ...')
       const archive = archiver('zip')
-      // res.set('Content-Type', 'application/x-gtar')
       archive.bulk([
         { expand: true, cwd: filePath, src: ['**'], dest: '.' }
       ])
       archive.pipe(res)
       archive.finalize()
-      Promise.resolve('next')
     } else {
       console.log('Listing ...')
       const files = await fs.promise.readdir(filePath)
@@ -34,6 +37,6 @@ module.exports = async function readHandler(req, res, next) {
       res.set('Content-Length', contentLength)
       res.json(res.body)
     }
+    Promise.resolve('next')
   }
-  Promise.resolve('next')
 }

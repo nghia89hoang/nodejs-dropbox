@@ -13,7 +13,7 @@ const path = require('path')
 // ------------------------------ MIDDLEWARES
 const verifyPath = require('./middlewares/verifyPath')
 const resolveFileStat = require('./middlewares/resolveFileStat')
-const sendHeaders = require('./middlewares/sendHeaders')
+const resolveHeaders = require('./middlewares/resolveHeaders')
 const end = require('./middlewares/end')
 // const dispatchTCP = require('./middlewares/dispatchTCP')
 
@@ -74,9 +74,9 @@ async function main() {
   // ** ROUTING ***************
   // const dispatchAllUser = dispatchTCP(clients)
   httpServer.use(router)
-  router.head('*', verifyPath, resolveFileStat, sendHeaders, end)
-  router.get('*', verifyPath, resolveFileStat, sendHeaders, readHandler, end)
-  router.put('*', verifyPath, resolveFileStat, createHandler(tcpSyncCreate()), end)
+  router.head('*', verifyPath, resolveFileStat, resolveHeaders, end)
+  router.get('*', verifyPath, resolveFileStat, resolveHeaders, readHandler, end)
+  router.put('*', verifyPath, resolveFileStat, resolveHeaders, createHandler(tcpSyncCreate()), end)
   router.post('*', verifyPath, resolveFileStat, updateHandler(tcpSyncUpdate()), end)
   router.delete('*', verifyPath, resolveFileStat, deleteHandler(tcpSyncDelete()), end)
               // ** ERR HANDLE ************
