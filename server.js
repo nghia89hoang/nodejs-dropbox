@@ -29,18 +29,23 @@ const ROOT_DIR = conf.ROOT_DIR
 
 const clients = []
 const stagedFiles = []
-
-function tcpSync(action) {
+// actionSrc = 'HTTP' or 'WATCH'
+function tcpSync(action, actionSrc = 'HTTP') {
   const syncImpl = (filePath, isDir) => {
     const relativePath = path.relative(ROOT_DIR, filePath)
     const pair = action + ':' + relativePath
-    const idx = stagedFiles.indexOf(pair)
-    if (idx !== -1) {
-      console.log(`DUPLICATED ${action} ON ${filePath}`)
-      stagedFiles.splice(idx, 1)
-      return
+    // For HTTP : already fired TCP
+    if (actionSrc === 'HTTP') {
+      stagedFiles.push(pair)
     }
-    stagedFiles.push(pair)
+    if (actionSrc === 'WATCH') {
+      const idx = stagedFiles.indexOf(pair)
+      if (idx !== -1) {
+        console.log(`DUPLICATED ${action} ON ${filePath}`)
+        stagedFiles.splice(idx, 1)
+        return
+      }
+    }
     console.log(`TCP ${action} ON FILES: ${filePath}`)
     const messages = {
       action,
@@ -107,27 +112,27 @@ async function main() {
 function onAddDir(abspath) {
   // console.log(`add dir ${abspath}`)
   const relativePath = abspath
-  tcpSync('create')(relativePath, true)
+  tcpSync('create', 'WATCH')(relativePath, true)
 }
 function onUnlinkDir(abspath) {
   console.log(`rmv dir ${abspath}`)
   const relativePath = abspath
-  tcpSync('delete')(relativePath, true)
+  tcpSync('delete', 'WATCH')(relativePath, true)
 }
 function onAdd(abspath) {
   console.log(`add file ${abspath}`)
   const relativePath = abspath
-  tcpSync('create')(relativePath, false)
+  tcpSync('create', 'WATCH')(relativePath, false)
 }
 function onChange(abspath) {
   console.log(`upd file ${abspath}`)
   const relativePath = abspath
-  tcpSync('update')(relativePath, false)
+  tcpSync('update', 'WATCH')(relativePath, false)
 }
 function onUnlink(abspath) {
   console.log(`rmv file ${abspath}`)
   const relativePath = abspath
-  tcpSync('delete')(relativePath, false)
+  tcpSync('delete', 'WATCH')(relativePath, false)
 }
 
 main()

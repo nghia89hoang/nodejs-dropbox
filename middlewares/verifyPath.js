@@ -4,8 +4,8 @@ const path = require('path')
 const ROOT_DIR = conf.ROOT_DIR
 // const ROOT_DIR = path.resolve(path.join(process.cwd(), 'files'))
 
-module.exports = function verifyPath(req, res, next) {  
-  const filePath = path.resolve(path.join(ROOT_DIR, req.url))
+module.exports = function verifyPath(req, res, next) {
+  const filePath = path.resolve(path.join(ROOT_DIR, decodeURI(req.url)))
   console.log(`---------- BEGIN HTTP ON FILEPATH @: ${filePath}`)
   // if (filePath.indexOf(ROOT_DIR) !== 0) {
   //   res.status(400).end('Invalid path')
