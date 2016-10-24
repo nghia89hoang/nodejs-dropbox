@@ -35,10 +35,10 @@ Time spent: 15
 
 ## Walkthrough
 ### Express VFS API Server Demo
-![Video Walkthrough](vfs-server.gif)
+![Video Walkthrough](demo_gif/vfs-server.gif)
 
 ### TCP Dropbox Sync Server Demo
-![Video Walkthrough](dropbox_sync_server.gif)
+![Video Walkthrough](demo_gif/dropbox_sync_server.gif)
 
 
 
