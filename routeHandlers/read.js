@@ -25,7 +25,7 @@ module.exports = async function readHandler(req, res, next) {
       ])
       archive.pipe(res)
       archive.finalize()
-      return Promise.resolve('next')
+      Promise.resolve('next')
     } else {
       console.log('Listing ...')
       const files = await fs.promise.readdir(filePath)
