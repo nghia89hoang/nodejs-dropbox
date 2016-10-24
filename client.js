@@ -16,18 +16,20 @@ const HTTP_PORT = conf.HTTP_PORT
 const SERVER = conf.SERVER
 const HTTP_SERVER_URL = `http://${SERVER}:${HTTP_PORT}`
 
+async function initFiles(data) {
+  console.log('Sync full using zip')
+  const options = {
+    uri: HTTP_SERVER_URL,
+    headers: { Accept: 'application/x-gtar' },
+    method: 'GET'
+  }
+  const readStream = request(options)
+  readStream.pipe(unzip.Extract({ path: CLIENT_DIR }))
+}
 async function main() {
   const socket = new nssocket.NsSocket()
   socket.connect(TCP_PORT, SERVER)
-  socket.data('SYNC_ALL', (data) => {
-    console.log('Sync full using zip')
-    const options = {
-      url: HTTP_SERVER_URL,
-      headers: { Accept: 'application/x-gtar' }
-    }
-    const readStream = request.get(options)
-    readStream.pipe(unzip.Extract({ path: CLIENT_DIR }))
-  })
+  socket.data('SYNC_ALL', initFiles)
   socket.data('SYNC', async (data) => {
     const filePath = path.resolve(path.join(CLIENT_DIR, data.path))
     console.log(`ACTION: ${data.action} -> ${data.type}: ${filePath}`)

@@ -11,6 +11,6 @@ module.exports = function deleteHandler(onDelete) {
     rimraf.promise(filePath).then(dummy => {
       onDelete(req.filePath, req.isDir)
     })
-    Promise.resolve('next')
+    return Promise.resolve('next')
   }
 }

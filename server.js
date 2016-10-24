@@ -55,7 +55,9 @@ function tcpSync(action) {
   return syncImpl
 }
 
-const tcpSyncWrite = () => tcpSync('write')
+const tcpSyncCreate = () => tcpSync('create')
+
+const tcpSyncUpdate = () => tcpSync('update')
 
 const tcpSyncDelete = () => tcpSync('delete')
 
@@ -69,8 +71,8 @@ async function main() {
   httpServer.use(router)
   router.head('*', verifyPath, resolveFileStat, sendHeaders, end)
   router.get('*', verifyPath, resolveFileStat, sendHeaders, readHandler, end)
-  router.put('*', verifyPath, resolveFileStat, createHandler(tcpSyncWrite()), end)
-  router.post('*', verifyPath, resolveFileStat, updateHandler(tcpSyncWrite()), end)
+  router.put('*', verifyPath, resolveFileStat, createHandler(tcpSyncCreate()), end)
+  router.post('*', verifyPath, resolveFileStat, updateHandler(tcpSyncUpdate()), end)
   router.delete('*', verifyPath, resolveFileStat, deleteHandler(tcpSyncDelete()), end)
               // ** ERR HANDLE ************
   httpServer.use((err, req, res, next) => {
@@ -105,7 +107,7 @@ async function main() {
 function onAddDir(abspath) {
   // console.log(`add dir ${abspath}`)
   const relativePath = abspath
-  tcpSync('write')(relativePath, true)
+  tcpSync('create')(relativePath, true)
 }
 function onUnlinkDir(abspath) {
   console.log(`rmv dir ${abspath}`)
@@ -115,12 +117,12 @@ function onUnlinkDir(abspath) {
 function onAdd(abspath) {
   console.log(`add file ${abspath}`)
   const relativePath = abspath
-  tcpSync('write')(relativePath, false)
+  tcpSync('create')(relativePath, false)
 }
 function onChange(abspath) {
   console.log(`upd file ${abspath}`)
   const relativePath = abspath
-  tcpSync('write')(relativePath, false)
+  tcpSync('update')(relativePath, false)
 }
 function onUnlink(abspath) {
   console.log(`rmv file ${abspath}`)
